@@ -5,158 +5,199 @@ const nextButton = document.getElementById("next");
 const previousButton = document.getElementById("previous");
 const shuffleButton = document.getElementById("shuffle");
 
+// Define an array containing all the songs with their details
 const allSongs = [
+  // Each object represents a song with properties like id, title, artist, duration, and source URL
+
   {
     id: 0,
-    title: "Scratching The Surface",
-    artist: "Quincy Larson",
-    duration: "4:25",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/scratching-the-surface.mp3",
+    title: "Basket Case",
+    artist: "Green Day",
+    duration: "3:01",
+    src: "music/Basket Case.mp3",
   },
   {
     id: 1,
-    title: "Can't Stay Down",
-    artist: "Quincy Larson",
-    duration: "4:15",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/cant-stay-down.mp3",
+    title: "Here is the House",
+    artist: "Andain",
+    duration: "4:52",
+    src: "music/Here is the House.mp3",
   },
   {
     id: 2,
-    title: "Still Learning",
-    artist: "Quincy Larson",
-    duration: "3:51",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/still-learning.mp3",
+    title: "Like A Stone",
+    artist: "Audioslave",
+    duration: "4:54",
+    src: "music/Like A Stone.mp3",
   },
   {
     id: 3,
-    title: "Cruising for a Musing",
-    artist: "Quincy Larson",
-    duration: "3:34",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/cruising-for-a-musing.mp3",
+    title: "Money Trees (Feat. Jay Rock)",
+    artist: "Kendrick Lamar",
+    duration: "6:26",
+    src: "music/Money Trees (Feat. Jay Rock).mp3",
   },
   {
     id: 4,
-    title: "Never Not Favored",
-    artist: "Quincy Larson",
-    duration: "3:35",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/never-not-favored.mp3",
+    title: "One In A Million (Radio Edit)",
+    artist: "Andrew Rayel Ft. Jonathan Mendelsohn",
+    duration: "3:09",
+    src: "music/One In A Million (Radio Edit).mp3",
   },
   {
     id: 5,
-    title: "From the Ground Up",
-    artist: "Quincy Larson",
-    duration: "3:12",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/from-the-ground-up.mp3",
+    title: "Outside",
+    artist: "Staind",
+    duration: "4:52",
+    src: "music/Outside.mp3",
   },
   {
     id: 6,
-    title: "Walking on Air",
-    artist: "Quincy Larson",
-    duration: "3:25",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/walking-on-air.mp3",
+    title: "Pain",
+    artist: "Jimmy Eat World",
+    duration: "3:01",
+    src: "music/Pain.mp3",
   },
   {
     id: 7,
-    title: "Can't Stop Me. Can't Even Slow Me Down.",
-    artist: "Quincy Larson",
-    duration: "3:52",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/cant-stop-me-cant-even-slow-me-down.mp3",
+    title: "Spiders",
+    artist: "System Of A Down",
+    duration: "3:35",
+    src: "music/Spiders.mp3",
   },
   {
     id: 8,
-    title: "The Surest Way Out is Through",
-    artist: "Quincy Larson",
-    duration: "3:10",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/the-surest-way-out-is-through.mp3",
+    title: "Stir It Up",
+    artist: "Bob Marley",
+    duration: "5:32",
+    src: "music/Stir It Up.mp3",
   },
   {
     id: 9,
-    title: "Chasing That Feeling",
-    artist: "Quincy Larson",
-    duration: "2:43",
-    src: "https://s3.amazonaws.com/org.freecodecamp.mp3-player-project/chasing-that-feeling.mp3",
+    title: "T.N.T.",
+    artist: "AC/DC",
+    duration: "3:47",
+    src: "music/T.N.T..mp3",
   },
 ];
 
+// Initialize the Audio object
 const audio = new Audio();
+
+// userData object containing songs, current song, and song current time
 let userData = {
-  songs: [...allSongs],
-  currentSong: null,
-  songCurrentTime: 0,
+  songs: [...allSongs], // Copy of allSongs
+  currentSong: null, // Current song being played
+  songCurrentTime: 0, // Current playback time of the song
 };
 
+// Function to play a song by its ID
 const playSong = (id) => {
+  // Find the song from userData using its ID
   const song = userData?.songs.find((song) => song.id === id);
+  // Set audio source and title to the selected song
   audio.src = song.src;
   audio.title = song.title;
 
+  // If the selected song is different from the current one, reset playback time
   if (userData?.currentSong === null || userData?.currentSong.id !== song.id) {
     audio.currentTime = 0;
   } else {
     audio.currentTime = userData?.songCurrentTime;
   }
+
+  // Update userData with the current song
   userData.currentSong = song;
+  // Update playButton style to indicate playing state
   playButton.classList.add("playing");
 
+  // Highlight the current song in the playlist
   highlightCurrentSong();
+  // Update player display with song title and artist
   setPlayerDisplay();
+  // Update play button accessibility text
   setPlayButtonAccessibleText();
+  // Play the audio
   audio.play();
 };
 
+// Function to pause the currently playing song
 const pauseSong = () => {
+  // Save current playback time
   userData.songCurrentTime = audio.currentTime;
-
+  // Update playButton style to indicate paused state
   playButton.classList.remove("playing");
+  // Pause the audio
   audio.pause();
 };
 
+// Function to play the next song in the playlist
 const playNextSong = () => {
+  // If no current song is playing, play the first song
   if (userData?.currentSong === null) {
     playSong(userData?.songs[0].id);
   } else {
+    // Get the index of the current song in the playlist
     const currentSongIndex = getCurrentSongIndex();
+    // Get the next song from userData
     const nextSong = userData?.songs[currentSongIndex + 1];
-
+    // Play the next song
     playSong(nextSong.id);
   }
 };
 
+// Function to play the previous song in the playlist
 const playPreviousSong = () => {
+  // If no current song is playing, return
   if (userData?.currentSong === null) return;
   else {
+    // Get the index of the current song in the playlist
     const currentSongIndex = getCurrentSongIndex();
+    // Get the previous song from userData
     const previousSong = userData?.songs[currentSongIndex - 1];
-
+    // Play the previous song
     playSong(previousSong.id);
   }
 };
 
+// Function to shuffle the playlist
 const shuffle = () => {
+  // Shuffle the songs array in userData
   userData?.songs.sort(() => Math.random() - 0.5);
+  // Reset current song and song current time
   userData.currentSong = null;
   userData.songCurrentTime = 0;
-
+  // Render the shuffled songs in the playlist
   renderSongs(userData?.songs);
+  // Pause the audio
   pauseSong();
+  // Update player display
   setPlayerDisplay();
+  // Update play button accessibility text
   setPlayButtonAccessibleText();
 };
 
+// Function to delete a song from the playlist
 const deleteSong = (id) => {
+  // If the deleted song is the current song, reset playback state
   if (userData?.currentSong?.id === id) {
     userData.currentSong = null;
     userData.songCurrentTime = 0;
-
+    // Pause the audio
     pauseSong();
+    // Update player display
     setPlayerDisplay();
   }
-
+  // Remove the deleted song from the userData array
   userData.songs = userData?.songs.filter((song) => song.id !== id);
+  // Re-render the updated playlist
   renderSongs(userData?.songs);
+  // Highlight the current song
   highlightCurrentSong();
+  // Update play button accessibility text
   setPlayButtonAccessibleText();
 
+  // If there are no more songs in the playlist, create a reset button
   if (userData?.songs.length === 0) {
     const resetButton = document.createElement("button");
     const resetText = document.createTextNode("Reset Playlist");
@@ -166,40 +207,50 @@ const deleteSong = (id) => {
     resetButton.appendChild(resetText);
     playlistSongs.appendChild(resetButton);
 
+    // Event listener to reset the playlist when the button is clicked
     resetButton.addEventListener("click", () => {
       userData.songs = [...allSongs];
-
+      // Render the default sorted playlist
       renderSongs(sortSongs());
+      // Update play button accessibility text
       setPlayButtonAccessibleText();
+      // Remove the reset button
       resetButton.remove();
     });
   }
 };
 
+// Function to update player display with current song information
 const setPlayerDisplay = () => {
   const playingSong = document.getElementById("player-song-title");
   const songArtist = document.getElementById("player-song-artist");
   const currentTitle = userData?.currentSong?.title;
   const currentArtist = userData?.currentSong?.artist;
 
+  // Set text content of player elements
   playingSong.textContent = currentTitle ? currentTitle : "";
   songArtist.textContent = currentArtist ? currentArtist : "";
 };
 
+// Function to highlight the currently playing song in the playlist
 const highlightCurrentSong = () => {
   const playlistSongElements = document.querySelectorAll(".playlist-song");
   const songToHighlight = document.getElementById(
     `song-${userData?.currentSong?.id}`
   );
 
+  // Remove highlighting from all songs
   playlistSongElements.forEach((songEl) => {
     songEl.removeAttribute("aria-current");
   });
 
+  // Highlight the current song if it exists
   if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
 };
 
+// Function to render songs in the playlist
 const renderSongs = (array) => {
+  // Generate HTML for each song in the array
   const songsHTML = array
     .map((song) => {
       return `
@@ -218,9 +269,11 @@ const renderSongs = (array) => {
     })
     .join("");
 
+  // Set HTML content of the playlist
   playlistSongs.innerHTML = songsHTML;
 };
 
+// Function to set the accessible text for the play button
 const setPlayButtonAccessibleText = () => {
   const song = userData?.currentSong || userData?.songs[0];
 
@@ -230,29 +283,41 @@ const setPlayButtonAccessibleText = () => {
   );
 };
 
+// Function to get the index of the current song in the playlist
 const getCurrentSongIndex = () =>
   userData?.songs.indexOf(userData?.currentSong);
 
+// Event listener for play button click
 playButton.addEventListener("click", () => {
+  // If no current song is playing, play the first song
   if (userData?.currentSong === null) {
     playSong(userData?.songs[0].id);
   } else {
+    // Otherwise, play the current song
     playSong(userData?.currentSong.id);
   }
 });
 
+// Event listener for pause button click
 pauseButton.addEventListener("click", pauseSong);
 
+// Event listener for next button click
 nextButton.addEventListener("click", playNextSong);
 
+// Event listener for previous button click
 previousButton.addEventListener("click", playPreviousSong);
 
+// Event listener for shuffle button click
 shuffleButton.addEventListener("click", shuffle);
 
+// Event listener for when the audio ends
 audio.addEventListener("ended", () => {
+  // Get the index of the current song in the playlist
   const currentSongIndex = getCurrentSongIndex();
+  // Check if a next song exists
   const nextSongExists = userData?.songs[currentSongIndex + 1] !== undefined;
 
+  // If a next song exists, play it, otherwise reset playback state
   if (nextSongExists) {
     playNextSong();
   } else {
@@ -265,6 +330,7 @@ audio.addEventListener("ended", () => {
   }
 });
 
+// Function to sort the songs array alphabetically by title
 const sortSongs = () => {
   userData?.songs.sort((a, b) => {
     if (a.title < b.title) {
@@ -281,5 +347,7 @@ const sortSongs = () => {
   return userData?.songs;
 };
 
+// Render the sorted playlist initially
 renderSongs(sortSongs());
+// Set accessible text for play button
 setPlayButtonAccessibleText();
