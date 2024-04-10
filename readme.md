@@ -54,8 +54,6 @@ Users should be able to:
 - Mobile-Responsive Design
 - JavaScript - Scripting language
 
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
-
 ### What I learned
 
 I learned about querying variables, but I believe I still need practice.
