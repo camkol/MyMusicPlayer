@@ -20,7 +20,8 @@ Users should be able to:
 
 - View the optimal layout for the app depending on their device's screen size
 - See hover states for all interactive elements on the page
-- The App should operate like a regular music player with functions(play, pause, stop. previous, next and shuffle)
+- The App should operate like a regular music player with functions(play, pause, previous, next and shuffle)
+- Also a delete button for each song and reset button to reset the list
 
 ### Screenshot
 
